@@ -1,36 +1,31 @@
 name: Build Android APK
-
-# This tells GitHub to run the build every time you push code
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
-
 jobs:
   build:
-    runs-on: ubuntu-latest # This is the cloud computer
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
+        
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
-
+          
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper --gradle-version 8.2
+        
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         
-      # If you don't have a gradlew script yet, this step creates one!
-      - name: Generate Gradle Wrapper
-        run: gradle wrapper --gradle-version 8.2
-
       - name: Build Debug APK
         run: ./gradlew assembleDebug
-
+        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
