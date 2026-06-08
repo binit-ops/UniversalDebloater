@@ -1,13 +1,16 @@
 package com.example.debloater
 
-import android.os.Bundle
-import android.widget.Toast
-import android.app.Activity
+import moe.shizuku.api.Shizuku
 
-class MainActivity : Activity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Toast.makeText(this, "Universal Debloater Initialized!", Toast.LENGTH_LONG).show()
+class ShizukuController {
+    fun disableApp(packageName: String): Boolean {
+        if (!Shizuku.pingBinder()) return false
+        val command = "pm uninstall -k --user 0 $packageName"
+        return try {
+            val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
+            process.waitFor() == 0
+        } catch (e: Exception) {
+            false
+        }
     }
 }
-
