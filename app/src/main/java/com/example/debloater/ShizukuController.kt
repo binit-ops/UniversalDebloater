@@ -35,13 +35,11 @@ class ShizukuController {
         return executeCommand("pm uninstall -k --user 0 $packageName")
     }
 
-    [span_1](start_span)fun freezeApp(packageName: String): Boolean {
-        // Disables the app at the system level so it cannot run or detect network interfaces[span_1](end_span)
+    fun freezeApp(packageName: String): Boolean {
         return executeCommand("pm disable-user --user 0 $packageName")
     }
 
-    [span_2](start_span)fun restoreApp(packageName: String): Boolean {
-        // Restores uninstalled system apps and ensures they are enabled[span_2](end_span)
+    fun restoreApp(packageName: String): Boolean {
         executeCommand("cmd package install-existing $packageName")
         return executeCommand("pm enable $packageName")
     }
