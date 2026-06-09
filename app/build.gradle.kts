@@ -14,6 +14,15 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
+    // THIS IS THE FIX: Forces both Java and Kotlin to use version 17
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
@@ -24,4 +33,3 @@ dependencies {
     // libsu for Root
     implementation("com.github.topjohnwu.libsu:core:5.2.2")
 }
-
