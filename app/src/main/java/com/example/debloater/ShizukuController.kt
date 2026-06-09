@@ -5,7 +5,6 @@ import com.topjohnwu.superuser.Shell
 
 class ShizukuController {
     
-    // Initialize the root shell environment safely
     init {
         Shell.setDefaultBuilder(
             Shell.Builder.create()
@@ -14,10 +13,7 @@ class ShizukuController {
         )
     }
 
-    fun disableApp(packageName: String): Boolean {
-        val command = "pm uninstall -k --user 0 $packageName"
-
-        // TRIGGER 1: Try Shizuku first
+    private fun executeCommand(command: String): Boolean {
         if (Shizuku.pingBinder()) {
             return try {
                 val process = Shizuku.newProcess(arrayOf("sh", "-c", command), null, null)
@@ -27,13 +23,26 @@ class ShizukuController {
             }
         }
 
-        // TRIGGER 2: Fallback to Root (KernelSU / Magisk)
         if (Shell.getShell().isRoot) {
             val result = Shell.cmd(command).exec()
             return result.isSuccess
         }
 
-        // If neither Shizuku nor Root is available
         return false
+    }
+
+    fun nukeApp(packageName: String): Boolean {
+        return executeCommand("pm uninstall -k --user 0 $packageName")
+    }
+
+    [span_1](start_span)fun freezeApp(packageName: String): Boolean {
+        // Disables the app at the system level so it cannot run or detect network interfaces[span_1](end_span)
+        return executeCommand("pm disable-user --user 0 $packageName")
+    }
+
+    [span_2](start_span)fun restoreApp(packageName: String): Boolean {
+        // Restores uninstalled system apps and ensures they are enabled[span_2](end_span)
+        executeCommand("cmd package install-existing $packageName")
+        return executeCommand("pm enable $packageName")
     }
 }
