@@ -1,6 +1,7 @@
 package com.example.debloater
 
-import moe.shizuku.api.Shizuku
+// THIS IS THE FIXED LINE:
+import rikka.shizuku.Shizuku
 
 class ShizukuController {
     fun disableApp(packageName: String): Boolean {
