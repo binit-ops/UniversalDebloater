@@ -1,6 +1,5 @@
 package com.example.debloater
 
-// THIS IS THE FIXED LINE:
 import rikka.shizuku.Shizuku
 
 class ShizukuController {
